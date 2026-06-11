@@ -1,6 +1,9 @@
 const appInsights = require('applicationinsights');
 if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
-  appInsights.setup(process.env.APPLICATIONINSIGHTS_CONNECTION_STRING).start();
+  appInsights.setup(process.env.APPLICATIONINSIGHTS_CONNECTION_STRING)
+    .setAutoCollectRequests(true)
+    .setAutoCollectExceptions(true)
+    .start();
 }
 const express = require('express');
 const path = require('path');
