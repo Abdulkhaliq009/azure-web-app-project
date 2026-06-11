@@ -1,5 +1,7 @@
 const appInsights = require('applicationinsights');
-appInsights.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY).start();
+if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
+  appInsights.setup(process.env.APPLICATIONINSIGHTS_CONNECTION_STRING).start();
+}
 const express = require('express');
 const path = require('path');
 const { BlobServiceClient } = require('@azure/storage-blob');
