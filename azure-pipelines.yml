@@ -18,8 +18,10 @@ stages:
     steps:
     - task: NodeTool@1
       inputs:
-        versionSpec: '$(nodeVersion)'
+        versionSpec: '18.x'
       displayName: 'Install Node.js'
+    - script: node --version
+      displayName: 'Check Node version' 
 
     - script: npm install
       displayName: 'Install dependencies'
