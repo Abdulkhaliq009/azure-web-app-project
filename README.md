@@ -124,7 +124,7 @@ az group delete --name rg-3tier-app --yes --no-wait
 ```
 
 ---
-✅ Pipeline is working! Deployed on [date]
+✅ Pipeline is working! Deployed 
 
 ## 📄 License
 
