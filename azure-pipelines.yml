@@ -16,7 +16,6 @@ stages:
   jobs:
   - job: BuildJob
     steps:
-
     - task: NodeTool@0
       inputs:
         versionSpec: '$(nodeVersion)'
@@ -35,10 +34,25 @@ stages:
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
         replaceExistingArchive: true
-      displayName: 'Archive files'
 
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'webapp-drop'
-      displayName: 'Publish artifact'
+
+- stage: Deploy
+  displayName: 'Deploy to Azure'
+  dependsOn: Build
+  jobs:
+  - deployment: DeployJob
+    environment: 'Production'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebApp@1
+            inputs:
+              azureSubscription: 'azure-subscription-connection'
+              appType: 'webAppLinux'
+              appName: 'webapp-3tier-demo'
+              package: '$(Pipeline.Workspace)/webapp-drop/*.zip'
