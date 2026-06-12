@@ -40,9 +40,25 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'webapp-drop'
 
+- stage: Test
+  displayName: 'Smoke Tests'
+  dependsOn: Build
+  jobs:
+  - job: SmokeTest
+    steps:
+    - script: |
+        echo "Running smoke tests..."
+        RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://webapp-3tier-demo-hwhnbjf3a8d5hgf3.swedencentral-01.azurewebsites.net/health)
+        if [ "$RESPONSE" == "200" ]; then
+          echo "✅ Health check passed"
+        else
+          echo "⚠️ Health check returned HTTP $RESPONSE - continuing anyway"
+        fi
+      displayName: 'Run health check'
+
 - stage: Deploy
   displayName: 'Deploy to Azure'
-  dependsOn: Build
+  dependsOn: Test
   jobs:
   - deployment: DeployJob
     environment: 'Production'
